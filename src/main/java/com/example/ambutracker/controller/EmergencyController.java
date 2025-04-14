@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/emergencies")
 @Tag(name = "Emergency Management", description = "APIs for managing emergency requests")
-@SecurityRequirement(name = "bearerAuth")
 public class EmergencyController {
 
     private final EmergencyService emergencyService;
@@ -36,9 +35,8 @@ public class EmergencyController {
         description = "Creates a new emergency request with the provided details"
     )
     public ResponseEntity<Emergency> createEmergency(
-            @Valid @RequestBody EmergencyRequestDTO requestDTO,
-            @AuthenticationPrincipal User user) {
-        Emergency emergency = emergencyService.createEmergencyRequest(requestDTO, user);
+            @Valid @RequestBody EmergencyRequestDTO requestDTO) {
+        Emergency emergency = emergencyService.createEmergencyRequest(requestDTO, null);
         return ResponseEntity.ok(emergency);
     }
 
@@ -47,6 +45,7 @@ public class EmergencyController {
         summary = "Get emergency by ID",
         description = "Retrieves an emergency request by its ID"
     )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Emergency> getEmergencyById(
             @Parameter(description = "Emergency ID") @PathVariable Long id) {
         Emergency emergency = emergencyService.getEmergencyById(id);
@@ -58,6 +57,7 @@ public class EmergencyController {
         summary = "Get all emergencies",
         description = "Retrieves all emergency requests"
     )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<List<Emergency>> getAllEmergencies() {
         List<Emergency> emergencies = emergencyService.getAllEmergencies();
         return ResponseEntity.ok(emergencies);
@@ -68,6 +68,7 @@ public class EmergencyController {
         summary = "Get emergencies by status",
         description = "Retrieves all emergency requests with the specified status"
     )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<List<Emergency>> getEmergenciesByStatus(
             @Parameter(description = "Emergency status (PENDING, ASSIGNED, IN_PROGRESS, COMPLETED, CANCELLED)")
             @PathVariable EmergencyStatus status) {
@@ -80,6 +81,7 @@ public class EmergencyController {
         summary = "Update emergency status",
         description = "Updates the status of an emergency request"
     )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Emergency> updateEmergencyStatus(
             @Parameter(description = "Emergency ID") @PathVariable Long id,
             @RequestBody EmergencyStatus status) {
@@ -92,6 +94,7 @@ public class EmergencyController {
         summary = "Update emergency location",
         description = "Updates the location coordinates of an emergency request"
     )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Emergency> updateEmergencyLocation(
             @Parameter(description = "Emergency ID") @PathVariable Long id,
             @Parameter(description = "New latitude") @RequestParam Double latitude,
