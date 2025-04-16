@@ -18,7 +18,38 @@ public class Emergency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private EmergencyType emergencyType;
+
+    @Column(name = "patient_name")
+    private String patientName;
+
+    @Column(name = "patient_age")
+    private Integer patientAge;
+
+    @Column(name = "patient_condition")
+    private String patientCondition;
+
+    @Column(name = "pickup_location")
+    private String pickupLocation;
+
+    @Column(name = "pickup_latitude")
+    private Double pickupLatitude;
+
+    @Column(name = "pickup_longitude")
+    private Double pickupLongitude;
+
+    @Column(name = "destination_location")
+    private String destinationLocation;
+
+    @Column(name = "destination_latitude")
+    private Double destinationLatitude;
+
+    @Column(name = "destination_longitude")
+    private Double destinationLongitude;
+
     private String description;
+
     private Double latitude;
     private Double longitude;
 

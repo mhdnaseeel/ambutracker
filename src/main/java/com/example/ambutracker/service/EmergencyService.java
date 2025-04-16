@@ -4,6 +4,7 @@ import com.example.ambutracker.dto.EmergencyRequestDTO;
 import com.example.ambutracker.entity.Emergency;
 import com.example.ambutracker.entity.EmergencyStatus;
 import com.example.ambutracker.entity.User;
+import com.example.ambutracker.model.EmergencyRequest;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface EmergencyService {
     Emergency updateEmergencyLocation(Long id, Double latitude, Double longitude);
     void deleteEmergency(Long id);
     List<Emergency> findNearbyEmergencies(Double latitude, Double longitude, Double radiusInKm);
+    void processEmergencyRequest(EmergencyRequest request);
+    String getNearestHospitalAddress(Double latitude, Double longitude);
 } 

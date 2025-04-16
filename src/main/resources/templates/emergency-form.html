@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Emergency Request Form</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Emergency Request Form</h1>
+        <form id="emergencyForm">
+            <div class="form-group">
+                <label for="emergencyType">Emergency Type:</label>
+                <select id="emergencyType" name="emergencyType" required>
+                    <option value="MEDICAL">Medical</option>
+                    <option value="TRAUMA">Trauma</option>
+                    <option value="CARDIAC">Cardiac</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="patientName">Patient Name:</label>
+                <input type="text" id="patientName" name="patientName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="patientAge">Patient Age:</label>
+                <input type="number" id="patientAge" name="patientAge" required>
+            </div>
+
+            <div class="form-group">
+                <label for="patientCondition">Patient Condition:</label>
+                <input type="text" id="patientCondition" name="patientCondition" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pickupLocation">Pickup Location:</label>
+                <div class="location-input">
+                    <input type="text" id="pickupLocation" name="pickupLocation" required>
+                    <button type="button" id="getCurrentLocation" class="btn-secondary">Get Current Location</button>
+                </div>
+            </div>
+
+            <div class="form-group hidden">
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">
+            </div>
+
+            <div class="form-group">
+                <label for="destinationLocation">Destination Hospital:</label>
+                <input type="text" id="destinationLocation" name="destinationLocation" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Submit Emergency Request</button>
+        </form>
+    </div>
+
+    <script src="/js/location.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('emergencyForm');
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = {
+                    emergencyType: document.getElementById('emergencyType').value,
+                    patientName: document.getElementById('patientName').value,
+                    patientAge: parseInt(document.getElementById('patientAge').value),
+                    patientCondition: document.getElementById('patientCondition').value,
+                    pickupLocation: document.getElementById('pickupLocation').value,
+                    latitude: parseFloat(document.getElementById('latitude').value) || 0,
+                    longitude: parseFloat(document.getElementById('longitude').value) || 0,
+                    destinationLocation: document.getElementById('destinationLocation').value,
+                    description: document.getElementById('description').value
+                };
+
+                try {
+                    const response = await fetch('/api/emergencies', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        alert('Emergency request submitted successfully!');
+                        window.location.href = '/emergencies';
+                    } else {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to submit emergency request');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message || 'Failed to submit emergency request. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
